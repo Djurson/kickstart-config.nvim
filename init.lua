@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -990,6 +990,37 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
+  {
+    'nvim-tree/nvim-tree.lua',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('nvim-tree').setup {
+        view = { width = 30 },
+        update_focused_file = { enable = true, update_cwd = true },
+      }
+
+      -- Öppna tree automatiskt vid startup OM inga filer anges
+      if vim.fn.argc(-1) == 0 then
+        vim.cmd 'NvimTreeOpen'
+      end
+    end,
+  },
+  {
+    'akinsho/bufferline.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      options = {
+        mode = 'buffers',
+        offsets = {
+          {
+            filetype = 'NvimTree',
+            text = 'File Explorer',
+            padding = 1,
+          },
+        },
+      },
+    },
+  },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
