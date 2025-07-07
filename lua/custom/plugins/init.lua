@@ -68,4 +68,17 @@ return {
       require('nvim-ts-autotag').setup()
     end,
   },
+  {
+    'akinsho/toggleterm.nvim',
+    version = '*',
+    config = function()
+      require('toggleterm').setup {
+        open_mapping = [[<leader>tt]],
+        direction = 'vertical',
+        size = vim.o.columns * 0.3,
+        autochdir = false,
+        persist_size = true,
+      }
+    end,
+  },
 }
