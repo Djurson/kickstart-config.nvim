@@ -814,7 +814,10 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
       },
     },
   },
@@ -918,22 +921,20 @@ require('lazy').setup({
     },
   },
   {
-    'projekt0n/github-nvim-theme', -- GitHub-theme
-    name = 'github-theme',
-    lazy = false,
-    priority = 1000,
+    'folke/tokyonight.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
-      require('github-theme').setup {
-        options = {
-          hide_end_of_buffer = true,
-          transparent = false,
-          terminal_color = true,
-          styles = {
-            comments = 'italic',
-          },
+      ---@diagnostic disable-next-line: missing-fields
+      require('tokyonight').setup {
+        styles = {
+          comments = { italic = true }, -- Disable italics in comments
         },
       }
-      vim.cmd 'colorscheme github_dark'
+
+      -- Load the colorscheme here.
+      -- Like many other themes, this one has different styles, and you could load
+      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
 
@@ -1012,7 +1013,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = false, disable = { 'ruby', 'javascript', 'typescript', 'tsx', 'json', 'go' } },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -1135,3 +1136,17 @@ bufferline.setup {
     separator_style = 'slant',
   },
 }
+
+vim.cmd 'Copilot disable'
+local copilot_enabled = false
+vim.api.nvim_create_user_command('ToggleCopilot', function()
+  if copilot_enabled then
+    vim.cmd 'Copilot disable'
+    copilot_enabled = false
+  else
+    vim.cmd 'Copilot enable'
+    copilot_enabled = true
+  end
+end, {})
+
+vim.keymap.set('n', '<leader>tcp', ':ToggleCopilot<CR>', { silent = true, desc = 'Toggle Copilot On/Off' })
