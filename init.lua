@@ -439,8 +439,10 @@ require('lazy').setup({
 
       -- Custom keybindings
       vim.keymap.set('n', '<leader>fb', ':NvimTreeToggle<CR>', { silent = true, desc = '[F]ile [B]rowse toggle' })
-      vim.keymap.set('n', '<leader>pd', ':NeovimProjectDiscover<CR>', { silent = true, desc = '[P]roject [D]iscover' })
-      vim.keymap.set('n', '<leader>ph', ':NeovimProjectHistory<CR>', { silent = true, desc = '[P]roject [H]istory' })
+      vim.keymap.set('n', '<leader>fbc', ':NvimTreeCollapse<CR>', { silent = true, desc = '[F]ile [B]rowse [C]ollapse folders' })
+
+      vim.keymap.set('n', '<leader>pp', ':NeovimProjectDiscover history', { desc = '[P]roject [P]icker' })
+      vim.keymap.set('n', '<leader>ppr', ':NeovimProjectLoadRecent', { silent = true, desc = '[P]roject [P]icker [R]ecent' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -995,19 +997,17 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
+
   { -- File browser
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('nvim-tree').setup {
         view = { width = 30 },
-        update_focused_file = { enable = true, update_cwd = true },
+        sync_root_with_cwd = true,
+        respect_buf_cwd = true,
+        update_focused_file = { enable = true, update_root = true },
       }
-
-      -- Öppna tree automatiskt vid startup OM inga filer anges
-      if vim.fn.argc(-1) == 0 then
-        vim.cmd 'NvimTreeOpen'
-      end
     end,
   },
   { -- Tabs
@@ -1026,27 +1026,39 @@ require('lazy').setup({
       },
     },
   },
-  {
+  { -- Project manager
     'coffebar/neovim-project',
     opts = {
-      projects = { -- define project roots
-        '~/projects/*',
-        '~/.config/*',
-      },
-      last_session_on_startup = true,
+      projects = { '~/AppData/Local/nvim/', 'C:/Universitet/*' },
       picker = {
         type = 'telescope', -- or "fzf-lua"
-        preview = {
-          enabled = true,
-          git_status = true,
-          git_fetch = true,
-          show_hidden = true,
-        },
+        preview = { enabled = true, git_status = true, git_fetch = true, show_hidden = true },
+      },
+      datapath = vim.fn.stdpath 'data',
+      dashboard_mode = true,
+      forget_project_keys = {
+        -- insert mode: Ctrl+d
+        i = '<C-d>',
+        -- normal mode: d
+        n = 'd',
+      },
+      follow_symlinks = 'full',
+      session_manager_opts = {
+        autosave_ignore_dirs = { vim.fn.expand '~', '/tmp' },
+        autosave_ignore_filetypes = { 'ccc-ui', 'gitcommit', 'gitrebase', 'qf', 'toggleterm' },
       },
     },
     init = function()
       -- enable saving the state of plugins in the session
       vim.opt.sessionoptions:append 'globals' -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
+      vim.api.nvim_create_autocmd('VimEnter', {
+        pattern = '*',
+        callback = function()
+          if vim.fn.argc() == 0 then
+            vim.cmd 'NeovimProjectDiscover'
+          end
+        end,
+      })
     end,
     dependencies = {
       { 'nvim-lua/plenary.nvim' },
