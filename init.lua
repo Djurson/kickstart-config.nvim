@@ -1184,10 +1184,3 @@ vim.api.nvim_create_user_command('ToggleCopilot', function()
 end, {})
 
 vim.keymap.set('n', '<leader>tcp', ':ToggleCopilot<CR>', { silent = true, desc = 'Toggle Copilot On/Off' })
-
-require('toggleterm').setup {
-  open_mapping = [[<leader>tt]],
-  terminal_mappings = true, -- aktivera, så att mapparna fungerar
-}
-
-vim.api.nvim_set_keymap('t', '<C-x>', [[<C-\><C-n><C-c>]], { noremap = true, silent = true })
