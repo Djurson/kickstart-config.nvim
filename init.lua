@@ -437,6 +437,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
+      -- Custom keybindings
+      vim.keymap.set('n', '<leader>fb', ':NvimTreeToggle<CR>', { silent = true, desc = '[F]ile [B]rowse toggle' })
+      vim.keymap.set('n', '<leader>pd', ':NeovimProjectDiscover<CR>', { silent = true, desc = '[P]roject [D]iscover' })
+      vim.keymap.set('n', '<leader>ph', ':NeovimProjectHistory<CR>', { silent = true, desc = '[P]roject [H]istory' })
+
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
@@ -990,7 +995,7 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
-  {
+  { -- File browser
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
@@ -1005,7 +1010,7 @@ require('lazy').setup({
       end
     end,
   },
-  {
+  { -- Tabs
     'akinsho/bufferline.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
@@ -1020,6 +1025,39 @@ require('lazy').setup({
         },
       },
     },
+  },
+  {
+    'coffebar/neovim-project',
+    opts = {
+      projects = { -- define project roots
+        '~/projects/*',
+        '~/.config/*',
+      },
+      last_session_on_startup = true,
+      picker = {
+        type = 'telescope', -- or "fzf-lua"
+        preview = {
+          enabled = true,
+          git_status = true,
+          git_fetch = true,
+          show_hidden = true,
+        },
+      },
+    },
+    init = function()
+      -- enable saving the state of plugins in the session
+      vim.opt.sessionoptions:append 'globals' -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
+    end,
+    dependencies = {
+      { 'nvim-lua/plenary.nvim' },
+      -- optional picker
+      { 'nvim-telescope/telescope.nvim', tag = '0.1.4' },
+      -- optional picker
+      { 'ibhagwan/fzf-lua' },
+      { 'Shatur/neovim-session-manager' },
+    },
+    lazy = false,
+    priority = 100,
   },
 }, {
   ui = {
