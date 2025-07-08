@@ -68,7 +68,7 @@ return {
       require('nvim-ts-autotag').setup()
     end,
   },
-  {
+  { -- Toggle terminals
     'akinsho/toggleterm.nvim',
     version = '*',
     config = function()
@@ -79,6 +79,31 @@ return {
         autochdir = false,
         persist_size = true,
       }
+      local Terminal = require('toggleterm.terminal').Terminal
+
+      -- 1️⃣ General terminal
+      local general = Terminal:new {
+        direction = 'vertical',
+        hidden = true,
+        go_back = true,
+      }
+      vim.keymap.set('n', '<leader>tt', function()
+        general:toggle()
+      end, { desc = '[T]oggle General [T]erminal' })
+
+      -- 2️⃣ Git-terminal
+      local git = Terminal:new {
+        cmd = 'tig',
+        direction = 'float',
+        hidden = true,
+        close_on_exit = false,
+        float_opts = { border = 'double' },
+        go_back = true,
+        display_name = 'Git terminal',
+      }
+      vim.keymap.set('n', '<leader>tgt', function()
+        git:toggle()
+      end, { desc = '[T]oggle [G]it [T]erminal' })
     end,
   },
 }

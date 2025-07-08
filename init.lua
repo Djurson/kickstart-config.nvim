@@ -1021,7 +1021,7 @@ require('lazy').setup({
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -1109,6 +1109,8 @@ require('catppuccin').setup {
 
 vim.cmd.colorscheme 'catppuccin'
 
+-- Update filebrowser when changing project
+
 local user_dirch = vim.api.nvim_create_augroup('UserDirChanged', { clear = true })
 
 vim.api.nvim_create_autocmd('DirChanged', {
@@ -1129,6 +1131,8 @@ vim.api.nvim_create_autocmd('DirChanged', {
   end,
 })
 
+-- General formatting?
+
 vim.api.nvim_create_autocmd('BufWritePre', {
   group = vim.api.nvim_create_augroup('TSAddMissingImports', { clear = true }),
   pattern = { '*.ts', '*.tsx', '*.js', '*.jsx' },
@@ -1139,6 +1143,8 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     }
   end,
 })
+
+-- Tabs settings
 
 for i = 1, 9 do
   vim.keymap.set('n', '<leader>bt' .. i, string.format('<cmd>lua require("bufferline").go_to_buffer(%d, true)<CR>', i), { desc = 'Go to buffer: ' .. i })
@@ -1172,6 +1178,7 @@ bufferline.setup {
   },
 }
 
+-- Disable copilot
 vim.cmd 'Copilot disable'
 local copilot_enabled = false
 vim.api.nvim_create_user_command('ToggleCopilot', function()
