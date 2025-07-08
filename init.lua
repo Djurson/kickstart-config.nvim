@@ -1154,7 +1154,7 @@ local bufferline = require 'bufferline'
 bufferline.setup {
   options = {
     mode = 'buffers',
-    style_preset = bufferline.style_preset.default,
+    style_preset = bufferline.style_preset.no_italic,
     diagnostics = 'nvim_lsp',
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
       local icon = level:match 'error' and '󰅚 ' or '󰀪 '
@@ -1169,14 +1169,19 @@ bufferline.setup {
         separator = true,
       },
     },
-    buffer_close_icon = 'x',
-    modified_icon = '🔵',
-    close_icon = 'x',
+    buffer_close_icon = '󰅖',
+    modified_icon = '● ',
+    close_icon = ' ',
+    left_trunc_marker = ' ',
+    right_trunc_marker = ' ',
     color_icons = true,
     show_buffer_icons = true,
     separator_style = 'slant',
   },
 }
+
+vim.keymap.set('n', '<leader>bn', ':BufferLineCycleNext<CR>', { silent = true, desc = '[B]ufferline cycle [N]ext' })
+vim.keymap.set('n', '<leader>bp', ':BufferLineCyclePrev<CR>', { silent = true, desc = '[B]ufferline cycle [P]revious' })
 
 -- Disable copilot
 vim.cmd 'Copilot disable'
