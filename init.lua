@@ -1180,8 +1180,9 @@ bufferline.setup {
   },
 }
 
-vim.keymap.set('n', '<leader>bn', ':BufferLineCycleNext<CR>', { silent = true, desc = '[B]ufferline cycle [N]ext' })
-vim.keymap.set('n', '<leader>bp', ':BufferLineCyclePrev<CR>', { silent = true, desc = '[B]ufferline cycle [P]revious' })
+vim.keymap.set('n', '<leader>bn', ':BufferLineCycleNext<CR>', { silent = true, desc = '[B]ufferline Cycle [N]ext' })
+vim.keymap.set('n', '<leader>bp', ':BufferLineCyclePrev<CR>', { silent = true, desc = '[B]ufferline Cycle [P]revious' })
+vim.keymap.set('n', '<leader>bc', ':bd<CR>', { silent = true, desc = '[B]ufferline [C]lose Current' })
 
 -- Disable copilot
 vim.cmd 'Copilot disable'
