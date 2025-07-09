@@ -76,8 +76,11 @@ return {
         open_mapping = [[<leader>tt]],
         direction = 'vertical',
         size = vim.o.columns * 0.3,
-        autochdir = false,
+        close_on_exit = true,
+        autochdir = true,
         persist_size = true,
+        start_in_insert = true,
+        terminal_mappings = true,
       }
       local Terminal = require('toggleterm.terminal').Terminal
 
@@ -86,20 +89,22 @@ return {
         direction = 'vertical',
         hidden = true,
         go_back = true,
+        display_name = 'General Terminal',
       }
       vim.keymap.set('n', '<leader>tt', function()
         general:toggle()
       end, { desc = '[T]oggle General [T]erminal' })
 
-      -- 2️⃣ Git-terminal
+      -- Git terminal
       local git = Terminal:new {
         cmd = 'tig',
         direction = 'float',
         hidden = true,
-        close_on_exit = false,
+        close_on_exit = true,
         float_opts = { border = 'double' },
         go_back = true,
         display_name = 'Git terminal',
+        zindex = 2,
       }
       vim.keymap.set('n', '<leader>tgt', function()
         git:toggle()
