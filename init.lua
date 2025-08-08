@@ -1198,3 +1198,4 @@ vim.api.nvim_create_user_command('ToggleCopilot', function()
 end, {})
 
 vim.keymap.set('n', '<leader>tcp', ':ToggleCopilot<CR>', { silent = true, desc = 'Toggle Copilot On/Off' })
+
