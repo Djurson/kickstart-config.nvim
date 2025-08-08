@@ -22,6 +22,7 @@ return {
       projects = {
         'C:/Universitet/*',
         '~/AppData/Local/nvim/',
+        'D:/G/Portfolio/*',
       },
       picker = {
         type = 'telescope', -- or "fzf-lua"
